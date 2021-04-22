@@ -1,6 +1,36 @@
 # PromoEngineDemo
 Demo for e-commerce platform implementing scalable promotion engine
 
+The purpose of the project is to implement a scalable engine for promotions in an e-commerce application.
+It allows to add or remove promotions for single and multiple products.
+Implementation of a new type of promotion, cart based or item based is possible just implementing the dedicated interface.
+
+In order to achieve the modularity goal, the promotion engine implements the strategy pattern. An interface ```PromoStrategy``` is used to define how the checkout retrieves the total discount to apply to the cart.
+Current implementations of the interface are:
+* ```FixedAmountNCartItemsPromo``` get N items of a product and pay a fixed amount
+* ```FixedAmountCombinedItemsPromo``` get items A, B, C... and pay a fixed amount
+
+The enum ```PromoType``` contains keys to the selection map in ```CheckoutService```. Each promotion type implementation has to be annotated as ```@Component("PROMO_TYPE_KEY")``` in order to be recognised and handled.
+
+The selection of the right promotion strategy is delegated to Spring through the strategy map ```promoStrategyMap``` in ```CheckoutService```.
+
+To implement a new strategy:
+- Create a new class implementing ```PromoStrategy```
+- Implement the method ```public BigDecimal applyDiscount(CartItem cartItem)``` in the new component
+- Add a new entry <NEW_PROMOTION_TYPE> in the ```PromoType``` Enum
+- Annotate the new strategy implementation class with ```@Component("<NEW_PROMOTION_TYPE>")```
+
+Spring can now populate the ```promoStrategyMap``` in ```CheckoutService``` including the newly created component.
+
+To use the new strategy simply add a record to the Database:
+
+```sql
+INSERT INTO PROMOTIONS (name, promo_code, promo_type, discount_value, num_items)
+VALUES ('my new promo', 'PROMO123', 'SINGLE_ITEM_PERCENT', 30, 2);
+```
+
+The current design allows a product to be registered for 1 promotion at time. A promotion can include more than 1 product, like a combination of products A, B and C.
+
 #### Prerequisites
 
 Application runs with Java8, SpringBoot v2.4.5 and Maven.
