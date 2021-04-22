@@ -14,18 +14,32 @@ $ git checkout master
 $ mvn spring-boot:run
 ```
 
-#### Accessing the H2 console
-
-URL to H2 console: ***http://localhost:8080/h2-console***
-Connection URL is ***jdbc:h2:mem:promodb***
-Credentials are default ones, user 'sa' and no password
-
 #### OpenAPI documetation and UI test
 
 OpenAPI description can be found at http://localhost:8080/v3/api-docs/
 
 Testing API is possible at http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
 The URL above works as API client to test applcition functionalities
+
+#### Running test for required use case
+
+To run all test:
+```shell
+$ cd PromoEngineDemo
+$ mvn test
+```
+
+To run only tests for the use case (2 different promotion strategies):
+```shell
+$ cd PromoEngineDemo
+$ mvn -Dtest=PromoEngineDemoTest test
+```
+
+#### Accessing the H2 console
+
+URL to H2 console: ***http://localhost:8080/h2-console***
+Connection URL is ***jdbc:h2:mem:promodb***
+Credentials are default ones, user 'sa' and no password
 
 #### Database schema
 
