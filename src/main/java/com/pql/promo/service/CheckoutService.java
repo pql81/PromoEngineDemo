@@ -6,6 +6,7 @@ import com.pql.promo.dto.CheckoutResponse;
 import com.pql.promo.exception.CartException;
 import com.pql.promo.repository.CartRepository;
 import com.pql.promo.strategies.PromoStrategy;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 /**
  * Created by pasqualericupero on 21/04/2021.
  */
+@Log4j2
 @Service
 public class CheckoutService {
 
@@ -34,6 +36,7 @@ public class CheckoutService {
         Optional<Cart> cart0 = cartRepository.findByReference(reference);
 
         if (!cart0.isPresent()) {
+            log.warn("Cart " + reference + " does not exist!");
             throw new CartException("Cart does not exist!");
         }
 
@@ -57,6 +60,8 @@ public class CheckoutService {
 
         // if promo exist then apply it
         if (cartItem.getProduct().getPromo() != null) {
+            log.info("A promo applies to product: " + cartItem.getProduct().getSku());
+
             // select the right prom strategy for the item
             PromoStrategy promoStrategy = promoStrategyMap.get(cartItem.getProduct().getPromo().getPromoType().name());
             discount = promoStrategy.applyDiscount(cartItem);

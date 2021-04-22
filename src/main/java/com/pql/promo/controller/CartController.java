@@ -6,6 +6,7 @@ import com.pql.promo.dto.CreateCartResponse;
 import com.pql.promo.dto.GetCartResponse;
 import com.pql.promo.service.CartService;
 import com.pql.promo.service.CheckoutService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 /**
  * Created by pasqualericupero on 20/04/2021.
  */
+@Log4j2
 @RestController
 public class CartController {
 
@@ -26,6 +28,7 @@ public class CartController {
 
     @GetMapping("/carts/{reference}")
     public ResponseEntity<GetCartResponse> getCart(@PathVariable String reference) {
+        log.info("GET carts/{" + reference + "}");
 
         GetCartResponse response = cartService.getCart(reference);
 
@@ -38,6 +41,7 @@ public class CartController {
 
     @PostMapping("/carts")
     public ResponseEntity<CreateCartResponse> createCart(@RequestBody CreateCartRequest request) {
+        log.info("POST carts " + request);
 
         CreateCartResponse response = cartService.createCart(request);
 
@@ -46,6 +50,7 @@ public class CartController {
 
     @DeleteMapping("/carts/{reference}")
     public ResponseEntity<Void> deleteCart(@PathVariable String reference) {
+        log.info("DELETE carts/{" + reference + "}");
 
         cartService.deleteCart(reference);
 
@@ -57,6 +62,7 @@ public class CartController {
     // it returns anyway HttpStatus.CREATED as intended to be a creation call
     @PostMapping("/carts/{reference}/checkout")
     public ResponseEntity<CheckoutResponse> checkoutCart(@PathVariable String reference) {
+        log.info("POST carts/{" + reference + "}/checkout");
 
         CheckoutResponse response = checkoutService.checkout(reference);
 

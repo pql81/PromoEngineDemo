@@ -6,6 +6,7 @@ import com.pql.promo.dto.CreateCartResponse;
 import com.pql.promo.dto.GetCartItemDTO;
 import com.pql.promo.dto.GetCartResponse;
 import com.pql.promo.repository.CartRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 /**
  * Created by pasqualericupero on 20/04/2021.
  */
+@Log4j2
 @Service
 public class CartService {
 
@@ -32,6 +34,8 @@ public class CartService {
             Cart cart = cart0.get();
             response = new GetCartResponse(cart.getUsername(), cart.getReference());
             response.setCartItems(getCartItemsFromCart(cart));
+        } else {
+            log.warn("Cart not found - reference: " + reference);
         }
 
         return response;
@@ -57,6 +61,8 @@ public class CartService {
         String reference = UUID.randomUUID().toString();
         cart.setReference(reference);
         cartRepository.save(cart);
+
+        log.info("Created cart with reference:" + reference);
 
         return new CreateCartResponse(reference);
     }

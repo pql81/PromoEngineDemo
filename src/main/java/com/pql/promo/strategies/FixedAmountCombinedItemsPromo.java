@@ -4,6 +4,7 @@ import com.pql.promo.domain.Cart;
 import com.pql.promo.domain.CartItem;
 import com.pql.promo.domain.Product;
 import com.pql.promo.domain.Promo;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -14,14 +15,19 @@ import java.util.stream.Collectors;
 /**
  * Created by pasqualericupero on 21/04/2021.
  */
+@Log4j2
 @Component("MULTIPLE_ITEMS_FIXED")
 public class FixedAmountCombinedItemsPromo implements PromoStrategy {
     @Override
     public BigDecimal applyDiscount(CartItem cartItem) {
+        log.info("Apply MULTIPLE_ITEMS_FIXED strategy to cart item");
+
         BigDecimal discount = BigDecimal.ZERO;
 
         // make sure no promo has already applied to item
         if (!cartItem.isPromoApplied()) {
+            log.info("Cart item has not applied to any promo yet!");
+
             Promo promo = cartItem.getProduct().getPromo();
 
             // check if there are all items matching promo requirements
@@ -39,6 +45,7 @@ public class FixedAmountCombinedItemsPromo implements PromoStrategy {
 
                     // if one of the item required for the promo has already applied for other promo the skip
                     if (promoItem.isPromoApplied()) {
+                        log.info("Some other required item has already applied to a promo - quit");
                         promoCartItems.clear();
                         break;
                     } else {
@@ -65,6 +72,9 @@ public class FixedAmountCombinedItemsPromo implements PromoStrategy {
                     // calculate the total amount of items eligible for promo before discount applies
                     beforeDiscount = beforeDiscount.add(promoCartItem.getProduct().getPrice());
                 }
+
+                log.info("Amount before discount: " + beforeDiscount);
+                log.info("Discounted amount " + promo.getDiscountValue());
 
                 discount = (beforeDiscount.subtract(new BigDecimal(promo.getDiscountValue())).multiply(maxDiscountTimes));
             }
