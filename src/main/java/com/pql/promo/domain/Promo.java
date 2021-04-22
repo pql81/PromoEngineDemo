@@ -32,6 +32,6 @@ public class Promo {
 
     private Integer numItems;
 
-    @OneToMany(mappedBy = "promo")
+    @OneToMany(mappedBy = "promo", fetch = FetchType.EAGER)
     private Set<Product> products;
 }

@@ -2,6 +2,8 @@ package com.pql.promo.service;
 
 import com.pql.promo.domain.Product;
 import com.pql.promo.domain.Promo;
+import com.pql.promo.dto.CreatePromoRequest;
+import com.pql.promo.dto.CreatePromoResponse;
 import com.pql.promo.dto.GetPromoResponse;
 import com.pql.promo.exception.ProductException;
 import com.pql.promo.repository.ProductRepository;
@@ -53,12 +55,12 @@ public class PromoServiceTest {
         promo.setProducts(productSet);
 
         when(productRepository.findBySku("abc01")).thenReturn(Optional.of(mockProduct));
-        when(promoRepository.findByProductsAndPromoCode(mockProduct, "PROMO5")).thenReturn(Optional.of(promo));
+        when(promoRepository.findByProducts(mockProduct)).thenReturn(Optional.of(promo));
     }
 
     @Test
     public void testGetPromoForProduct() throws Exception {
-        GetPromoResponse response = promoService.getPromoForProduct("abc01", "PROMO5");
+        GetPromoResponse response = promoService.getPromoForProduct("abc01");
 
         assertEquals("test promo", response.getName());
         assertEquals("PROMO5", response.getPromoCode());
@@ -68,6 +70,26 @@ public class PromoServiceTest {
 
     @Test(expected = ProductException.class)
     public void testFailGetPromoForProduct() throws Exception {
-        promoService.getPromoForProduct("invalidSku", "PROMO5");
+        promoService.getPromoForProduct("invalidSku");
+    }
+
+    @Test
+    public void testCreatePromo() throws Exception {
+        CreatePromoRequest request = new CreatePromoRequest();
+        request.setName("test promo");
+        request.setPromoCode("PROMO1");
+        request.setPromoType(PromoType.SINGLE_ITEM_FIXED);
+        request.setDiscountVal(5);
+        request.setNumItems(3);
+
+        Product mockProduct = mock(Product.class);
+
+        when(productRepository.findBySku("cde456")).thenReturn(Optional.of(mockProduct));
+        when(promoRepository.findByProducts(mockProduct)).thenReturn(Optional.empty());
+
+        CreatePromoResponse response = promoService.createPromoForProduct("cde456", request);
+
+        assertEquals("PROMO1", response.getPromoCode());
+        assertEquals(PromoType.SINGLE_ITEM_FIXED, response.getPromoType());
     }
 }
