@@ -11,7 +11,7 @@
 	<groupId>com.pql</groupId>
 	<artifactId>promo-engine</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PromoEngineDemo</name>
+	<name>promo-engine-demo</name>
 	<description>Promotion Engine Demo project</description>
 	<properties>
 		<java.version>1.8</java.version>
