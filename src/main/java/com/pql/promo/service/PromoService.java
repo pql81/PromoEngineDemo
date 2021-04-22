@@ -8,6 +8,7 @@ import com.pql.promo.dto.GetPromoResponse;
 import com.pql.promo.exception.ProductException;
 import com.pql.promo.repository.ProductRepository;
 import com.pql.promo.repository.PromoRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.*;
 /**
  * Created by pasqualericupero on 21/04/2021.
  */
+@Log4j2
 @Service
 public class PromoService {
 
@@ -29,6 +31,7 @@ public class PromoService {
         Optional<Product> product0 = productRepository.findBySku(sku);
 
         if (!product0.isPresent()) {
+            log.warn("SKU does not exist: " + sku);
             throw new ProductException("SKU does not exist!");
         }
 
@@ -66,12 +69,14 @@ public class PromoService {
         Optional<Product> product0 = productRepository.findBySku(sku);
 
         if (!product0.isPresent()) {
+            log.warn("SKU does not exist: " + sku);
             throw new ProductException("SKU does not exist!");
         }
 
         Optional<Promo> promo0 = promoRepository.findByProducts(product0.get());
 
         if (promo0.isPresent()) {
+            log.warn("Product has already an active promo: " + sku);
             throw new ProductException("Product has already a promo!");
         }
 
