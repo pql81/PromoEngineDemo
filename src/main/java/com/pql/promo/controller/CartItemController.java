@@ -23,7 +23,7 @@ public class CartItemController {
 
         AddCartItemResponse response = cartItemService.addItemToCart(reference, request);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{reference}/items/{sku}")

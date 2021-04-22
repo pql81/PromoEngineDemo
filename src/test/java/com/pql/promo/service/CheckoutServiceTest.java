@@ -38,7 +38,7 @@ public class CheckoutServiceTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Map<String, PromoStrategy> promoStrategyMap = new HashMap<>();
         promoStrategyMap.put("SINGLE_ITEM_FIXED", new FixedAmountNCartItemsPromo());
         checkoutService = new CheckoutService(promoStrategyMap);
@@ -53,7 +53,7 @@ public class CheckoutServiceTest {
         Promo promo = new Promo();
         promo.setPromoType(PromoType.SINGLE_ITEM_FIXED);
         promo.setNumItems(2);
-        promo.setDiscountValue(3);
+        promo.setDiscountValue(7);
         promo.setPromoCode("PROMO1");
 
         Product product = new Product();

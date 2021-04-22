@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class FixedAmountNCartItemsPromo implements PromoStrategy {
     @Override
     public BigDecimal applyDiscount(CartItem cartItem) {
-        int discount = 0;
+        BigDecimal discount = BigDecimal.ZERO;
 
         // make sure no promo has already applied to item
         if (!cartItem.isPromoApplied()) {
@@ -21,13 +21,22 @@ public class FixedAmountNCartItemsPromo implements PromoStrategy {
 
             // check if the item quantity is enough for promo requirements
             if (promo.getNumItems() <= cartItem.getQuantity()) {
-                discount = cartItem.getQuantity() / promo.getNumItems() * promo.getDiscountValue();
+                // how many times can the same promo applies
+                int timesToApply = cartItem.getQuantity() / promo.getNumItems();
+
+                // calculate the total amount of items eligible for promo before discount applies
+                BigDecimal beforeDiscount = cartItem.getProduct().getPrice().multiply(new BigDecimal(timesToApply * promo.getNumItems()));
+
+                // discounted amount is the new calculated price to pay for eligible items
+                int discountedAmount = cartItem.getQuantity() / promo.getNumItems() * promo.getDiscountValue();
+
+                discount = beforeDiscount.subtract(new BigDecimal(discountedAmount));
 
                 // flag the item as promo has applied
                 cartItem.setPromoApplied(true);
             }
         }
 
-        return new BigDecimal(discount);
+        return discount;
     }
 }

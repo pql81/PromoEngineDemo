@@ -37,7 +37,7 @@ public class CartServiceTest {
     CartService cartService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Cart cart1 = new Cart();
         cart1.setId(12L);
         cart1.setReference("ref01");

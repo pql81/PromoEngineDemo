@@ -31,7 +31,7 @@ public class ProductServiceTest {
     ProductService productService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Product product1 = new Product();
         product1.setSku("abc01");
         product1.setName("test product 1");

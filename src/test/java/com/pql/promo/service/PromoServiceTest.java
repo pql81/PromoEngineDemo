@@ -38,7 +38,7 @@ public class PromoServiceTest {
     PromoService promoService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Product mockProduct = mock(Product.class);
 
         Promo promo = new Promo();

@@ -41,7 +41,7 @@ public class CartController {
 
         CreateCartResponse response = cartService.createCart(request);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/carts/{reference}")
@@ -54,11 +54,12 @@ public class CartController {
 
     // As the purpose of this project is a demo for promotions,
     // the checkout process consist of just calculating and returning amounts
+    // it returns anyway HttpStatus.CREATED as intended to be a creation call
     @PostMapping("/carts/{reference}/checkout")
     public ResponseEntity<CheckoutResponse> checkoutCart(@PathVariable String reference) {
 
         CheckoutResponse response = checkoutService.checkout(reference);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

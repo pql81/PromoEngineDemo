@@ -31,7 +31,7 @@ public class FixedAmountCombinedItemsPromoTest {
 
         BigDecimal discount = fixedAmountCombinedItemsPromo.applyDiscount(item);
 
-        assertEquals(new BigDecimal(5), discount);
+        assertEquals(new BigDecimal(2), discount);
     }
 
     @Test
@@ -40,13 +40,13 @@ public class FixedAmountCombinedItemsPromoTest {
         Cart cart = item.getCart();
 
         cart.getCartItems().forEach(currentItem ->
-            currentItem.setQuantity(16)
+            currentItem.setQuantity(8)
         );
-        item.setQuantity(18);
+        item.setQuantity(6);
 
         BigDecimal discount = fixedAmountCombinedItemsPromo.applyDiscount(item);
 
-        assertEquals(new BigDecimal(80), discount);
+        assertEquals(new BigDecimal(12), discount);
     }
 
     @Test
@@ -78,13 +78,13 @@ public class FixedAmountCombinedItemsPromoTest {
 
         Product product3 = new Product();
         product3.setName("product3");
-        product3.setPrice(new BigDecimal(11));
+        product3.setPrice(new BigDecimal(2));
         product3.setSku("TEST333");
         product3.setPromo(promo);
 
         Product product4 = new Product();
         product4.setName("product4");
-        product4.setPrice(new BigDecimal(5));
+        product4.setPrice(new BigDecimal(4));
         product4.setSku("TEST444");
         product4.setPromo(promo);
 
@@ -106,7 +106,7 @@ public class FixedAmountCombinedItemsPromoTest {
 
         BigDecimal discount = fixedAmountCombinedItemsPromo.applyDiscount(item);
 
-        assertEquals(new BigDecimal(5), discount);
+        assertEquals(new BigDecimal(8), discount);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class FixedAmountCombinedItemsPromoTest {
 
         Promo promo = new Promo();
         promo.setPromoType(PromoType.MULTIPLE_ITEMS_FIXED);
-        promo.setDiscountValue(5);
+        promo.setDiscountValue(14);
         promo.setPromoCode("PROMO2");
 
         Product product1 = new Product();

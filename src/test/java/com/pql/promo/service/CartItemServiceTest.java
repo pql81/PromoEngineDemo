@@ -42,7 +42,7 @@ public class CartItemServiceTest {
     CartItemService cartItemService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Cart mockCart = mock(Cart.class);
         Product mockProduct = mock(Product.class);
         when(mockProduct.getName()).thenReturn("test product");

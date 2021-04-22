@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class FixedAmountCombinedItemsPromo implements PromoStrategy {
     @Override
     public BigDecimal applyDiscount(CartItem cartItem) {
-        int discount = 0;
+        BigDecimal discount = BigDecimal.ZERO;
 
         // make sure no promo has already applied to item
         if (!cartItem.isPromoApplied()) {
@@ -55,17 +55,21 @@ public class FixedAmountCombinedItemsPromo implements PromoStrategy {
             if (!promoCartItems.isEmpty()) {
                 // calculate how many times the discount can apply based on the min quantity between eligible products
                 Optional<CartItem> minQty = promoCartItems.stream().min(Comparator.comparing(CartItem::getQuantity));
-                int maxDiscountTimes = minQty.get().getQuantity();
+                BigDecimal maxDiscountTimes = new BigDecimal(minQty.get().getQuantity());
+                BigDecimal beforeDiscount = BigDecimal.ZERO;
 
                 // set all required items as promo applied
                 for (CartItem promoCartItem : promoCartItems) {
                     promoCartItem.setPromoApplied(true);
+
+                    // calculate the total amount of items eligible for promo before discount applies
+                    beforeDiscount = beforeDiscount.add(promoCartItem.getProduct().getPrice());
                 }
 
-                discount = maxDiscountTimes * promo.getDiscountValue();
+                discount = (beforeDiscount.subtract(new BigDecimal(promo.getDiscountValue())).multiply(maxDiscountTimes));
             }
         }
 
-        return new BigDecimal(discount);
+        return discount;
     }
 }
